@@ -1,16 +1,50 @@
+local is_deno = function()
+  local dir = vim.fn.expand("%:p:h")
+
+  return dir:find("/back") ~= nil or dir:find("/contract") ~= nil
+end
+local Util = require("lspconfig.util")
+
+local deno_root = Util.root_pattern("deno.json", "deno.jsonc")
+local node_root = Util.root_pattern("package.json")
+
 return {
   {
     "neovim/nvim-lspconfig",
-    setup = function()
-      require("lspconfig").denols.setup({
-        root_dir = root_pattern("deno.json", "deno.jsonc", ".git"),
-      })
-    end,
+    opts = {
+      servers = {
+        tsserver = {
+          root_dir = function(dir)
+            if not is_deno() then
+              return node_root(dir)
+            end
+          end,
+          single_file_support = false,
+        },
+        denols = {
+          root_dir = function(dir)
+            if is_deno() then
+              return deno_root(dir)
+            end
+          end,
+          single_file_support = false,
+        },
+      },
+    },
   },
-  --   {
-  --     "sigmasd/deno-nvim",
-  --   },
 }
+
+--   "neovim/nvim-lspconfig",
+--   setup = function()
+--     require("lspconfig").denols.setup({
+--       root_dir = root_pattern("deno.json", "deno.jsonc", ".git"),
+--     })
+--   end,
+-- },
+--   {
+--     "sigmasd/deno-nvim",
+--   },
+-- }
 -- {
 --   "neovim/nvim-lspconfig",
 --   dependencies = {
