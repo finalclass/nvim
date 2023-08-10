@@ -1,7 +1,11 @@
 local is_deno = function()
   local dir = vim.fn.expand("%:p:h")
 
-  return dir:find("/back") ~= nil or dir:find("/contract") ~= nil
+  if dir:find("/grow/examples/external") then
+    return false
+  end
+
+  return dir:find("/back") ~= nil or dir:find("/contract") ~= nil or dir:find("/grow")
 end
 local Util = require("lspconfig.util")
 

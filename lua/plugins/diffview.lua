@@ -16,6 +16,18 @@ return {
         -- ":silent ! gitea-link %:p " .. get_current_line_number() .. " <cr>",
         desc = "Get link to gitea repo",
       },
+      {
+        "<leader>dvv",
+        function()
+          vim.cmd("DiffviewOpen reviewed")
+        end,
+      },
+      {
+        "<leader>dvq",
+        function()
+          vim.cmd("DiffviewClose")
+        end,
+      },
     },
   },
 }
