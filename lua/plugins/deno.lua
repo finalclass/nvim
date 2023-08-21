@@ -5,12 +5,28 @@ local is_deno = function()
     return false
   end
 
-  return dir:find("/back") ~= nil or dir:find("/contract") ~= nil or dir:find("/grow")
-end
-local Util = require("lspconfig.util")
+  if dir:find("nexus") then
+    return true
+  end
 
-local deno_root = Util.root_pattern("deno.json", "deno.jsonc")
-local node_root = Util.root_pattern("package.json")
+  if dir:find("back") then
+    return true
+  end
+
+  if dir:find("contract") then
+    return true
+  end
+
+  if dir:find("grow") then
+    return true
+  end
+
+  return false
+end
+local util = require("lspconfig.util")
+
+local deno_root = util.root_pattern("deno.json", "deno.jsonc")
+local node_root = util.root_pattern("package.json")
 
 return {
   {
@@ -37,6 +53,24 @@ return {
     },
   },
 }
+
+-- prevent tsserver and denols competeing
+-- local active_clients = vim.lsp.get_active_clients()
+-- if client.name == "denols" then
+-- 	for _, client_ in pairs(active_clients) do
+-- 		-- stop tsserver if denols is already active
+-- 		if client_.name == "tsserver" then
+-- 			client_.stop()
+-- 		end
+-- 	end
+-- elseif client.name == "tsserver" then
+-- 	for _, client_ in pairs(active_clients) do
+-- 		-- prevent tsserver from starting if denols is already active
+-- 		if client_.name == "denols" then
+-- 			client.stop()
+-- 		end
+-- 	end
+-- end
 
 --   "neovim/nvim-lspconfig",
 --   setup = function()
