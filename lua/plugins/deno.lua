@@ -5,6 +5,10 @@ local is_deno = function()
     return false
   end
 
+  if dir:find("nexus/node") then
+    return false
+  end
+
   if dir:find("nexus") then
     return true
   end
@@ -21,12 +25,36 @@ local is_deno = function()
     return true
   end
 
+  if dir:find("plantolog") then
+    return true
+  end
+
   return false
 end
 local util = require("lspconfig.util")
 
 local deno_root = util.root_pattern("deno.json", "deno.jsonc")
 local node_root = util.root_pattern("package.json")
+
+function Stop_denols()
+  local active_clients = vim.lsp.get_active_clients()
+  for _, client in pairs(active_clients) do
+    -- stop tsserver if denols is already active
+    if client.name == "denols" then
+      client.stop()
+    end
+  end
+end
+
+function Stop_tsserver()
+  local active_clients = vim.lsp.get_active_clients()
+  for _, client in pairs(active_clients) do
+    -- stop tsserver if denols is already active
+    if client.name == "tsserver" then
+      client.stop()
+    end
+  end
+end
 
 return {
   {

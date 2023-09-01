@@ -28,3 +28,9 @@ end
 
 map({ "n" }, "<leader>be", ExecuteBashInSplit)
 map({ "v" }, "<leader>bo", ExecuteBashSelection)
+
+local vimscript_block = [[
+  imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
+  let g:copilot_no_tab_map = v:true
+]]
+vim.api.nvim_exec(vimscript_block, false)
